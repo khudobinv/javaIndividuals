@@ -1,22 +1,48 @@
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
-import java.util.HashSet;
+class AndArray implements Array {
+    private int[] array;
 
-public class AndArray implements Array{
-    @Override
-    public Set<Integer> add(Set<Integer> arr1, Set<Integer> arr2) {
-        Set<Integer> res = new HashSet<>(arr1);
-        Set<Integer> copyArr2 = new HashSet<>(arr2);
-        res.retainAll(copyArr2);
-        return res;
+    public AndArray(int[] array) {
+        this.array = array;
     }
 
     @Override
-    public List<Double> process(Set<Integer> arr) {
-        List<Double> res = new ArrayList<>();
-        for (int i : arr)
-            res.add(Math.sqrt(i));
-        return res;
+    public int[] add(int[] arr) {
+        return intersection(array, arr);
+    }
+
+    @Override
+    public double[] process(int[] arr) {
+        double[] result = new double[arr.length];
+        for (int i = 0; i < arr.length; i++) {
+            result[i] = sqrt(arr[i]);
+        }
+        return result;
+    }
+
+    private int[] intersection(int[] arr1, int[] arr2) {
+        int[] result = new int[Math.min(arr1.length, arr2.length)];
+        int index = 0;
+        for (int num : arr1) {
+            if (contains(arr2, num)) {
+                result[index++] = num;
+            }
+        }
+
+        int[] trimmedResult = new int[index];
+        System.arraycopy(result, 0, trimmedResult, 0, index);
+        return trimmedResult;
+    }
+
+    private boolean contains(int[] arr, int target) {
+        for (int num : arr) {
+            if (num == target) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private double sqrt(int num) {
+        return Math.sqrt(num);
     }
 }
